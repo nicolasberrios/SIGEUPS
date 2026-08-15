@@ -11,21 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('historial', function (Blueprint $table) {
+        Schema::create('fotografias', function (Blueprint $table) {
+
             $table->id();
 
-            $table->foreignId('equipo_id')
-                ->constrained('equipos')
+            $table->foreignId('evento_id')
+                ->constrained('eventos')
+                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
 
             $table->foreignId('usuario_id')
-                ->constrained('users');
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
 
-            $table->string('accion',100);
+            $table->string('ruta', 255);
 
-            $table->text('detalle')->nullable();
+            $table->string('descripcion', 255)->nullable();
 
             $table->timestamps();
+
+            $table->index('evento_id');
+
         });
     }
 
@@ -34,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('historial');
+        Schema::dropIfExists('fotografias');
     }
 };

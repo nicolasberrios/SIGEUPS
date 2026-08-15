@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modelos', function (Blueprint $table) {
+        Schema::create('tipos_intervencion', function (Blueprint $table) {
+
             $table->id();
 
-            $table->foreignId('marca_id')
-                ->constrained('marcas')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
-            $table->string('nombre', 100);
+            $table->string('nombre', 100)->unique();
 
             $table->timestamps();
 
-            $table->unique(['marca_id', 'nombre']);
         });
     }
 
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modelos');
+        Schema::dropIfExists('tipos_intervencion');
     }
 };

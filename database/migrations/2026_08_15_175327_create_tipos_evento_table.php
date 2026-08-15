@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modelos', function (Blueprint $table) {
-            $table->id();
+        Schema::create('tipos_evento', function (Blueprint $table) {
 
-            $table->foreignId('marca_id')
-                ->constrained('marcas')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+            $table->id();
 
             $table->string('nombre', 100);
 
+            $table->string('categoria', 50);
+
             $table->timestamps();
 
-            $table->unique(['marca_id', 'nombre']);
+            $table->unique(['nombre', 'categoria']);
+
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modelos');
+        Schema::dropIfExists('tipos_evento');
     }
 };
