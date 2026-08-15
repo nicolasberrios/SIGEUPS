@@ -5,63 +5,67 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class EstadosSeeder extends Seeder
+class TiposEventoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('estados')->insert([
+        DB::table('tipos_evento')->insert([
 
-            // Estados para UPS propiedad de Powertec
             [
-                'nombre' => 'Disponible',
-                'categoria' => 'Powertec',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nombre' => 'En préstamo',
-                'categoria' => 'Powertec',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nombre' => 'En uso',
-                'categoria' => 'Powertec',
+                'nombre' => 'Recepción',
+                'categoria' => 'Ingreso',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
-            // Estados para UPS de propietarios (clientes)
             [
-                'nombre' => 'Esperando diagnóstico',
-                'categoria' => 'Cliente',
+                'nombre' => 'Diagnóstico',
+                'categoria' => 'Servicio',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'En diagnóstico',
-                'categoria' => 'Cliente',
+                'nombre' => 'Mantenimiento preventivo',
+                'categoria' => 'Servicio',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'Esperando respuesta del cliente',
-                'categoria' => 'Cliente',
+                'nombre' => 'Reparación',
+                'categoria' => 'Servicio',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'En reparación',
-                'categoria' => 'Cliente',
+                'nombre' => 'Préstamo',
+                'categoria' => 'Logística',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'Lista para devolución',
-                'categoria' => 'Cliente',
+                'nombre' => 'Devolución',
+                'categoria' => 'Logística',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'nombre' => 'Cambio de ubicación',
+                'categoria' => 'Logística',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'nombre' => 'Inspección',
+                'categoria' => 'Servicio',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

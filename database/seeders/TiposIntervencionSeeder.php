@@ -5,63 +5,59 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class EstadosSeeder extends Seeder
+class TiposIntervencionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('estados')->insert([
+        DB::table('tipos_intervencion')->insert([
 
-            // Estados para UPS propiedad de Powertec
             [
-                'nombre' => 'Disponible',
-                'categoria' => 'Powertec',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nombre' => 'En préstamo',
-                'categoria' => 'Powertec',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nombre' => 'En uso',
-                'categoria' => 'Powertec',
+                'nombre' => 'Cambio de baterías',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
-            // Estados para UPS de propietarios (clientes)
             [
-                'nombre' => 'Esperando diagnóstico',
-                'categoria' => 'Cliente',
+                'nombre' => 'Cambio de módulo de baterías',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'En diagnóstico',
-                'categoria' => 'Cliente',
+                'nombre' => 'Cambio de módulo de potencia',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'Esperando respuesta del cliente',
-                'categoria' => 'Cliente',
+                'nombre' => 'Cambio de display',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'En reparación',
-                'categoria' => 'Cliente',
+                'nombre' => 'Cambio de tarjeta de comunicación',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
             [
-                'nombre' => 'Lista para devolución',
-                'categoria' => 'Cliente',
+                'nombre' => 'Instalación de tarjeta de comunicación',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'nombre' => 'Cambio de ventilador',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'nombre' => 'Cambio de otro componente',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
