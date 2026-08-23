@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -13,33 +14,69 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+     * Contraseña utilizada por la fábrica.
      */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
+     * Define los datos predeterminados del usuario.
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
         return [
+            'role_id' => function () {
+
+                $roleId = DB::table('roles')
+
+                    ->where('nombre', 'Tecnico')
+
+                    ->value('id');
+
+                if ($roleId) {
+
+                    return $roleId;
+
+                }
+
+                return DB::table('roles')->insertGetId([
+                    'nombre' => 'Tecnico',
+                    'descripcion' =>
+                        'Gestiona equipos y mantenimientos',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            },
+
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+
+            'email' => fake()
+                ->unique()
+                ->safeEmail(),
+
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+
+            'password' => static::$password
+                ??= Hash::make('password'),
+
+            'activo' => true,
+
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Indica que el correo no está verificado.
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(function (array $attributes) {
+
+            return [
+                'email_verified_at' => null,
+            ];
+
+        });
     }
 }

@@ -21,7 +21,17 @@ class Evento extends Model
     ];
 
     /**
-     * UPS a la que pertenece el evento.
+     * Conversión automática de atributos.
+     */
+    protected function casts(): array
+    {
+        return [
+            'fecha_hora' => 'datetime',
+        ];
+    }
+
+    /**
+     * UPS asociada al evento.
      */
     public function ups(): BelongsTo
     {
@@ -29,7 +39,7 @@ class Evento extends Model
     }
 
     /**
-     * Tipo de evento.
+     * Tipo de evento registrado.
      */
     public function tipoEvento(): BelongsTo
     {
@@ -37,7 +47,7 @@ class Evento extends Model
     }
 
     /**
-     * Usuario que realizó el evento.
+     * Usuario que registró el evento.
      */
     public function usuario(): BelongsTo
     {
@@ -45,19 +55,25 @@ class Evento extends Model
     }
 
     /**
-     * Estado resultante del evento.
+     * Estado de la UPS después del evento.
      */
     public function estadoResultante(): BelongsTo
     {
-        return $this->belongsTo(Estado::class, 'estado_resultante_id');
+        return $this->belongsTo(
+            Estado::class,
+            'estado_resultante_id'
+        );
     }
 
     /**
-     * Ubicación resultante del evento.
+     * Ubicación de la UPS después del evento.
      */
     public function ubicacionResultante(): BelongsTo
     {
-        return $this->belongsTo(Ubicacion::class, 'ubicacion_resultante_id');
+        return $this->belongsTo(
+            Ubicacion::class,
+            'ubicacion_resultante_id'
+        );
     }
 
     /**
@@ -77,7 +93,7 @@ class Evento extends Model
     }
 
     /**
-     * Intervenciones realizadas durante el evento.
+     * Intervenciones asociadas al evento.
      */
     public function intervenciones(): HasMany
     {

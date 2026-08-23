@@ -1,23 +1,28 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+
+        <div class="flex justify-between items-center gap-4">
 
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+
                 Ficha de la UPS
+
             </h2>
 
             <div class="flex gap-2">
 
-                <a href="{{ route('ups.edit', $up) }}"
-                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                <a
+                    href="{{ route('ups.edit', $up) }}"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
 
                     Editar
 
                 </a>
 
-                <a href="{{ route('ups.index') }}"
-                   class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
+                <a
+                    href="{{ route('ups.index') }}"
+                    class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
 
                     Volver
 
@@ -26,13 +31,14 @@
             </div>
 
         </div>
+
     </x-slot>
 
     <div class="py-6">
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6">
 
-            {{-- INFORMACIÓN GENERAL --}}
+            {{-- ================= INFORMACIÓN GENERAL ================= --}}
 
             <div class="bg-white rounded-lg shadow p-8 mb-6">
 
@@ -45,35 +51,99 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     <div>
-                        <p class="text-sm text-gray-500">Estado</p>
-                        <p class="font-semibold text-lg">
-                            {{ $up->estadoActual->nombre }}
+
+                        <p class="text-sm text-gray-500">
+
+                            Estado
+
                         </p>
+
+                        <p class="font-semibold text-lg">
+
+                            {{ $up->estadoActual->nombre }}
+
+                        </p>
+
                     </div>
 
                     <div>
-                        <p class="text-sm text-gray-500">Propietario</p>
-                        <p>{{ $up->propietario->nombre }}</p>
+
+                        <p class="text-sm text-gray-500">
+
+                            Propietario
+
+                        </p>
+
+                        <p>
+
+                            {{ $up->propietario->nombre }}
+
+                        </p>
+
                     </div>
 
                     <div>
-                        <p class="text-sm text-gray-500">Marca</p>
-                        <p>{{ $up->modelo->marca->nombre }}</p>
+
+                        <p class="text-sm text-gray-500">
+
+                            Marca
+
+                        </p>
+
+                        <p>
+
+                            {{ $up->modelo->marca->nombre }}
+
+                        </p>
+
                     </div>
 
                     <div>
-                        <p class="text-sm text-gray-500">Modelo</p>
-                        <p>{{ $up->modelo->nombre }}</p>
+
+                        <p class="text-sm text-gray-500">
+
+                            Modelo
+
+                        </p>
+
+                        <p>
+
+                            {{ $up->modelo->nombre }}
+
+                        </p>
+
                     </div>
 
                     <div>
-                        <p class="text-sm text-gray-500">Potencia</p>
-                        <p>{{ number_format($up->potencia_kva,2) }} kVA</p>
+
+                        <p class="text-sm text-gray-500">
+
+                            Potencia
+
+                        </p>
+
+                        <p>
+
+                            {{ number_format($up->potencia_kva, 2) }} kVA
+
+                        </p>
+
                     </div>
 
                     <div>
-                        <p class="text-sm text-gray-500">Ubicación</p>
-                        <p>{{ $up->ubicacionActual->nombre }}</p>
+
+                        <p class="text-sm text-gray-500">
+
+                            Ubicación
+
+                        </p>
+
+                        <p>
+
+                            {{ $up->ubicacionActual->nombre }}
+
+                        </p>
+
                     </div>
 
                 </div>
@@ -100,36 +170,153 @@
 
             </div>
 
-            {{-- EVENTOS --}}
+            {{-- ================= EVENTOS ================= --}}
 
             <div class="bg-white rounded-lg shadow p-6 mb-6">
 
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center gap-4">
 
-                    <h3 class="text-xl font-semibold">
+                    <div>
 
-                        Eventos
+                        <h3 class="text-xl font-semibold">
 
-                    </h3>
+                            Eventos
 
-                    <button
-                        class="bg-red-600 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed">
+                        </h3>
+
+                        <p class="text-sm text-gray-500 mt-1">
+
+                            Historial de movimientos y cambios de la UPS.
+
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ route(
+                            'eventos.create',
+                            ['ups' => $up->id]
+                        ) }}"
+                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
 
                         Registrar evento
 
-                    </button>
+                    </a>
 
                 </div>
 
-                <div class="mt-6 text-gray-500">
+                @if($up->eventos->isEmpty())
 
-                    No existen eventos registrados.
+                    <div class="mt-6 text-gray-500">
 
-                </div>
+                        No existen eventos registrados.
+
+                    </div>
+
+                @else
+
+                    <div class="mt-6 overflow-x-auto">
+
+                        <table class="table-sigeups min-w-full">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Fecha y hora</th>
+
+                                    <th>Tipo de evento</th>
+
+                                    <th>Estado resultante</th>
+
+                                    <th>Ubicación</th>
+
+                                    <th>Usuario</th>
+
+                                    <th></th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach($up->eventos as $evento)
+
+                                    <tr>
+
+                                        <td class="whitespace-nowrap">
+
+                                            {{ $evento->fecha_hora->format(
+                                                'd-m-Y H:i'
+                                            ) }}
+
+                                        </td>
+
+                                        <td>
+
+                                            <div class="font-semibold">
+
+                                                {{ $evento->tipoEvento->nombre }}
+
+                                            </div>
+
+                                            <div class="text-xs text-gray-500">
+
+                                                {{ $evento->tipoEvento->categoria }}
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $evento->estadoResultante->nombre }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $evento->ubicacionResultante->nombre }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $evento->usuario->name }}
+
+                                        </td>
+
+                                        <td class="text-right">
+
+                                            <a
+                                                href="{{ route(
+                                                    'eventos.show',
+                                                    $evento
+                                                ) }}"
+                                                class="text-red-600 font-semibold hover:text-red-800">
+
+                                                Detalle
+
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                @endif
 
             </div>
 
-            {{-- INTERVENCIONES --}}
+            {{-- ================= INTERVENCIONES ================= --}}
 
             <div class="bg-white rounded-lg shadow p-6 mb-6">
 
@@ -147,7 +334,7 @@
 
             </div>
 
-            {{-- DOCUMENTOS --}}
+            {{-- ================= DOCUMENTOS ================= --}}
 
             <div class="bg-white rounded-lg shadow p-6 mb-6">
 
@@ -165,7 +352,7 @@
 
             </div>
 
-            {{-- FOTOGRAFÍAS --}}
+            {{-- ================= FOTOGRAFÍAS ================= --}}
 
             <div class="bg-white rounded-lg shadow p-6 mb-6">
 
@@ -183,7 +370,7 @@
 
             </div>
 
-            {{-- ASIGNACIONES --}}
+            {{-- ================= ASIGNACIONES ================= --}}
 
             <div class="bg-white rounded-lg shadow p-6">
 

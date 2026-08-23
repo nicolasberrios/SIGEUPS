@@ -1,55 +1,216 @@
 <x-app-layout>
 
     <x-slot name="header">
+
         <div class="flex justify-between items-center">
 
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Gestión de UPS
-            </h2>
+            <div>
+
+                <h2 class="text-2xl font-bold text-gray-800">
+
+                    Gestión de UPS
+
+                </h2>
+
+                <p class="text-gray-500">
+
+                    Administración y búsqueda de equipos UPS.
+
+                </p>
+
+            </div>
 
             <a href="{{ route('ups.create') }}"
-               class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+               class="btn-primary">
 
-                + Registrar UPS
+                Registrar UPS
 
             </a>
 
         </div>
+
     </x-slot>
 
     <div class="py-6">
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-6">
 
-            @if(session('success'))
-                <div class="mb-4 rounded-lg bg-green-100 border border-green-300 text-green-800 px-4 py-3">
-                    {{ session('success') }}
-                </div>
-            @endif
+            {{-- ================= FILTROS ================= --}}
 
-            <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="panel mb-5">
 
-                <table class="min-w-full">
+                <form action="{{ route('ups.index') }}"
+                      method="GET">
 
-                    <thead class="bg-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                        <div>
+
+                            <label class="block mb-2 font-semibold">
+
+                                Buscar
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="q"
+                                value="{{ $texto }}"
+                                placeholder="Identificador, serie, marca..."
+                                class="w-full border rounded-lg px-4 py-3">
+
+                        </div>
+
+                        <div>
+
+                            <label class="block mb-2 font-semibold">
+
+                                Estado
+
+                            </label>
+
+                            <select
+                                name="estado"
+                                class="w-full border rounded-lg px-4 py-3">
+
+                                <option value="">
+
+                                    Todos
+
+                                </option>
+
+                                @foreach($estados as $estado)
+
+                                    <option
+                                        value="{{ $estado->id }}"
+                                        @selected($estadoSeleccionado == $estado->id)>
+
+                                        {{ $estado->nombre }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                        <div>
+
+                            <label class="block mb-2 font-semibold">
+
+                                Propietario
+
+                            </label>
+
+                            <select
+                                name="propietario"
+                                class="w-full border rounded-lg px-4 py-3">
+
+                                <option value="">
+
+                                    Todos
+
+                                </option>
+
+                                @foreach($propietarios as $propietario)
+
+                                    <option
+                                        value="{{ $propietario->id }}"
+                                        @selected($propietarioSeleccionado == $propietario->id)>
+
+                                        {{ $propietario->nombre }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                        <div>
+
+                            <label class="block mb-2 font-semibold">
+
+                                Ubicación
+
+                            </label>
+
+                            <select
+                                name="ubicacion"
+                                class="w-full border rounded-lg px-4 py-3">
+
+                                <option value="">
+
+                                    Todas
+
+                                </option>
+
+                                @foreach($ubicaciones as $ubicacion)
+
+                                    <option
+                                        value="{{ $ubicacion->id }}"
+                                        @selected($ubicacionSeleccionada == $ubicacion->id)>
+
+                                        {{ $ubicacion->nombre }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-end gap-3 mt-5">
+
+                        <a href="{{ route('ups.index') }}"
+                           class="btn-secondary">
+
+                            Limpiar
+
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn-primary">
+
+                            Buscar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            {{-- ================= TABLA ================= --}}
+
+            <div class="panel">
+
+                <table class="table-sigeups">
+
+                    <thead>
 
                         <tr>
 
-                            <th class="px-4 py-3 text-left">UPS</th>
+                            <th>Estado</th>
 
-                            <th class="px-4 py-3 text-left">Estado</th>
+                            <th>Identificador</th>
 
-                            <th class="px-4 py-3 text-left">Propietario</th>
+                            <th>Propietario</th>
 
-                            <th class="px-4 py-3 text-left">Marca</th>
+                            <th>Marca</th>
 
-                            <th class="px-4 py-3 text-left">Modelo</th>
+                            <th>Modelo</th>
 
-                            <th class="px-4 py-3 text-left">Potencia</th>
+                            <th>Ubicación</th>
 
-                            <th class="px-4 py-3 text-left">Ubicación</th>
-
-                            <th class="px-4 py-3 text-center">Acciones</th>
+                            <th></th>
 
                         </tr>
 
@@ -57,62 +218,76 @@
 
                     <tbody>
 
-                        @forelse($ups as $equipo)
+                        @forelse($ups as $up)
 
-                        <tr class="border-t hover:bg-gray-50">
+                            <tr>
 
-                            <td class="px-4 py-3 font-semibold">
-                                {{ $equipo->numero_identificador }}
-                            </td>
+                                <td>
 
-                            <td class="px-4 py-3">
-                                {{ $equipo->estadoActual->nombre }}
-                            </td>
+                                    {{ $up->estadoActual->nombre }}
 
-                            <td class="px-4 py-3">
-                                {{ $equipo->propietario->nombre }}
-                            </td>
+                                </td>
 
-                            <td class="px-4 py-3">
-                                {{ $equipo->modelo->marca->nombre }}
-                            </td>
+                                <td>
 
-                            <td class="px-4 py-3">
-                                {{ $equipo->modelo->nombre }}
-                            </td>
+                                    <strong>
 
-                            <td class="px-4 py-3">
-                                {{ number_format($equipo->potencia_kva,2) }} kVA
-                            </td>
+                                        {{ $up->numero_identificador }}
 
-                            <td class="px-4 py-3">
-                                {{ $equipo->ubicacionActual->nombre }}
-                            </td>
+                                    </strong>
 
-                            <td class="px-4 py-3 text-center">
+                                </td>
 
-                                <a href="{{ route('ups.edit',$equipo) }}"
-                                   class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                <td>
 
-                                    Editar
+                                    {{ $up->propietario->nombre }}
 
-                                </a>
+                                </td>
 
-                            </td>
+                                <td>
 
-                        </tr>
+                                    {{ $up->modelo->marca->nombre }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $up->modelo->nombre }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $up->ubicacionActual->nombre }}
+
+                                </td>
+
+                                <td class="text-right">
+
+                                    <a
+                                        href="{{ route('ups.show', $up) }}"
+                                        class="btn-secondary">
+
+                                        Detalle
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
 
                         @empty
 
-                        <tr>
+                            <tr>
 
-                            <td colspan="8" class="text-center py-10 text-gray-500">
+                                <td colspan="7"
+                                    class="text-center py-8 text-gray-500">
 
-                                No existen UPS registradas.
+                                    No se encontraron UPS.
 
-                            </td>
+                                </td>
 
-                        </tr>
+                            </tr>
 
                         @endforelse
 
@@ -120,10 +295,12 @@
 
                 </table>
 
-            </div>
+                <div class="mt-6">
 
-            <div class="mt-6">
-                {{ $ups->links() }}
+                    {{ $ups->links() }}
+
+                </div>
+
             </div>
 
         </div>

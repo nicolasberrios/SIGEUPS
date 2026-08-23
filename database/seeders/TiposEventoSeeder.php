@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoEvento;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class TiposEventoSeeder extends Seeder
 {
@@ -12,64 +12,36 @@ class TiposEventoSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('tipos_evento')->insert([
+        $tipos = [
 
-            [
-                'nombre' => 'Recepción',
-                'categoria' => 'Ingreso',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ['nombre' => 'Registro de UPS',          'categoria' => 'Administrativo'],
+            ['nombre' => 'Actualización de UPS',     'categoria' => 'Administrativo'],
+            ['nombre' => 'Cambio de estado',         'categoria' => 'Administrativo'],
 
-            [
-                'nombre' => 'Diagnóstico',
-                'categoria' => 'Servicio',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ['nombre' => 'Recepción',                'categoria' => 'Ingreso'],
+            ['nombre' => 'Diagnóstico',              'categoria' => 'Servicio'],
+            ['nombre' => 'Mantenimiento preventivo', 'categoria' => 'Servicio'],
+            ['nombre' => 'Reparación',               'categoria' => 'Servicio'],
+            ['nombre' => 'Inspección',               'categoria' => 'Servicio'],
 
-            [
-                'nombre' => 'Mantenimiento preventivo',
-                'categoria' => 'Servicio',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            ['nombre' => 'Préstamo',                 'categoria' => 'Logística'],
+            ['nombre' => 'Devolución',               'categoria' => 'Logística'],
+            ['nombre' => 'Cambio de ubicación',      'categoria' => 'Logística'],
 
-            [
-                'nombre' => 'Reparación',
-                'categoria' => 'Servicio',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        ];
 
-            [
-                'nombre' => 'Préstamo',
-                'categoria' => 'Logística',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        foreach ($tipos as $tipo) {
 
-            [
-                'nombre' => 'Devolución',
-                'categoria' => 'Logística',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            TipoEvento::firstOrCreate(
 
-            [
-                'nombre' => 'Cambio de ubicación',
-                'categoria' => 'Logística',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                ['nombre' => $tipo['nombre']],
 
-            [
-                'nombre' => 'Inspección',
-                'categoria' => 'Servicio',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+                [
+                    'categoria' => $tipo['categoria'],
+                ]
 
-        ]);
+            );
+
+        }
     }
 }
