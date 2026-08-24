@@ -51,4 +51,9 @@ class Ups extends Model
     {
         return $this->hasMany(Fotografia::class, 'ups_id');
     }
+
+    public function documentos(): HasMany
+    {
+        return $this->hasMany(Documento::class, 'ups_id');
+    }
 }

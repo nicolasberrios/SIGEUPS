@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\FotografiaController;
 use App\Http\Controllers\ProfileController;
@@ -47,6 +48,22 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::delete('/fotografias/{fotografia}', [FotografiaController::class, 'destroy'])
         ->middleware('admin')
         ->name('fotografias.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Documentos
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('/ups/{up}/documentos', [DocumentoController::class, 'store'])
+        ->name('documentos.store');
+
+    Route::get('/documentos/{documento}/descargar', [DocumentoController::class, 'download'])
+        ->name('documentos.download');
+
+    Route::delete('/documentos/{documento}', [DocumentoController::class, 'destroy'])
+        ->middleware('admin')
+        ->name('documentos.destroy');
 
     /*
     |--------------------------------------------------------------------------

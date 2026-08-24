@@ -123,6 +123,7 @@ class UpsController extends Controller
             'eventos.ubicacionResultante',
             'eventos.usuario',
             'fotografias.usuario',
+            'documentos.usuario',
         ]);
 
         return view('ups.show', compact('up'));

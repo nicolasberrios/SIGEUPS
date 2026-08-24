@@ -10,6 +10,7 @@ class Documento extends Model
     protected $table = 'documentos';
 
     protected $fillable = [
+        'ups_id',
         'evento_id',
         'usuario_id',
         'nombre_original',
@@ -18,17 +19,16 @@ class Documento extends Model
         'tamano',
     ];
 
-    /**
-     * Evento al que pertenece el documento.
-     */
+    public function ups(): BelongsTo
+    {
+        return $this->belongsTo(Ups::class, 'ups_id');
+    }
+
     public function evento(): BelongsTo
     {
         return $this->belongsTo(Evento::class);
     }
 
-    /**
-     * Usuario que subió el documento.
-     */
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class);

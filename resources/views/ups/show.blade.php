@@ -323,17 +323,198 @@
 
             <div class="bg-white rounded-lg shadow p-6 mb-6">
 
-                <h3 class="text-xl font-semibold mb-4">
+                <div class="flex justify-between items-center gap-4 mb-6">
 
-                    Documentos
+                    <div>
 
-                </h3>
+                        <h3 class="text-xl font-semibold">
 
-                <p class="text-gray-500">
+                            Documentos
 
-                    No existen documentos asociados.
+                        </h3>
 
-                </p>
+                        <p class="text-sm text-gray-500 mt-1">
+
+                            Archivos asociados a la UPS.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <form
+                    method="POST"
+                    action="{{ route('documentos.store', $up) }}"
+                    enctype="multipart/form-data"
+                    class="border rounded-lg p-4 mb-6 bg-gray-50">
+
+                    @csrf
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                        <div class="md:col-span-2">
+
+                            <label class="block mb-2 font-semibold">
+
+                                Documento
+
+                            </label>
+
+                            <input
+                                type="file"
+                                name="documento"
+                                accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                                class="w-full rounded border-gray-300">
+
+                            <p class="text-sm text-gray-500 mt-1">
+
+                                Formatos permitidos: PDF, Word, Excel o imagen. Máximo 10 MB.
+
+                            </p>
+
+                            @error('documento')
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+
+                        </div>
+
+                        <div class="flex items-end">
+
+                            <button
+                                type="submit"
+                                class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded">
+
+                                Subir documento
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+                @if($up->documentos->isEmpty())
+
+                    <p class="text-gray-500">
+
+                        No existen documentos asociados.
+
+                    </p>
+
+                @else
+
+                    <div class="overflow-x-auto">
+
+                        <table class="table-sigeups min-w-full">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Documento</th>
+
+                                    <th>Extensión</th>
+
+                                    <th>Tamaño</th>
+
+                                    <th>Subido por</th>
+
+                                    <th>Fecha</th>
+
+                                    <th></th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach($up->documentos as $documento)
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="font-semibold">
+
+                                                {{ $documento->nombre_original }}
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ strtoupper($documento->extension) }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ number_format($documento->tamano / 1024, 2) }} KB
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $documento->usuario->name }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $documento->created_at->format('d-m-Y H:i') }}
+
+                                        </td>
+
+                                        <td class="text-right whitespace-nowrap">
+
+                                            <a
+                                                href="{{ route('documentos.download', $documento) }}"
+                                                class="text-red-600 font-semibold hover:text-red-800">
+
+                                                Descargar
+
+                                            </a>
+
+                                            @if(auth()->user()->isAdmin())
+
+                                                <form
+                                                    method="POST"
+                                                    action="{{ route('documentos.destroy', $documento) }}"
+                                                    class="inline ml-4"
+                                                    onsubmit="return confirm('¿Eliminar este documento?')">
+
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button
+                                                        type="submit"
+                                                        class="text-gray-600 font-semibold hover:text-gray-800">
+
+                                                        Eliminar
+
+                                                    </button>
+
+                                                </form>
+
+                                            @endif
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                @endif
 
             </div>
 
