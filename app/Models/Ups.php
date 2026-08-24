@@ -22,43 +22,33 @@ class Ups extends Model
         'observaciones',
     ];
 
-    /**
-     * Modelo de la UPS.
-     */
     public function modelo(): BelongsTo
     {
         return $this->belongsTo(Modelo::class);
     }
 
-    /**
-     * Propietario de la UPS.
-     */
     public function propietario(): BelongsTo
     {
         return $this->belongsTo(Propietario::class);
     }
 
-    /**
-     * Estado actual de la UPS.
-     */
     public function estadoActual(): BelongsTo
     {
         return $this->belongsTo(Estado::class, 'estado_actual_id');
     }
 
-    /**
-     * Ubicación actual de la UPS.
-     */
     public function ubicacionActual(): BelongsTo
     {
         return $this->belongsTo(Ubicacion::class, 'ubicacion_actual_id');
     }
 
-    /**
-     * Historial de eventos de la UPS.
-     */
     public function eventos(): HasMany
     {
         return $this->hasMany(Evento::class);
+    }
+
+    public function fotografias(): HasMany
+    {
+        return $this->hasMany(Fotografia::class, 'ups_id');
     }
 }

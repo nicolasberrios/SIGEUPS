@@ -16,50 +16,55 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'name',
     'email',
     'password',
-    'activo'
+    'activo',
 ])]
 
 #[Hidden([
     'password',
-    'remember_token'
+    'remember_token',
 ])]
 
 class User extends Authenticatable
 {
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Conversión de atributos.
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'activo' => 'boolean',
         ];
     }
 
-    /**
-     * Rol del usuario.
-     */
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Eventos registrados por el usuario.
-     */
     public function eventos(): HasMany
     {
-        return $this->hasMany(Evento::class);
+        return $this->hasMany(Evento::class, 'usuario_id');
     }
 
-    /**
-     * Intervenciones realizadas por el usuario.
-     */
     public function intervenciones(): HasMany
     {
-        return $this->hasMany(Intervencion::class);
+        return $this->hasMany(Intervencion::class, 'usuario_id');
+    }
+
+    public function isAdmin(): bool
+    {
+        return strtolower($this->role?->nombre ?? '') === 'administrador';
+    }
+
+    public function isUsuario(): bool
+    {
+        return strtolower($this->role?->nombre ?? '') === 'usuario';
+    }
+
+    public function estaActivo(): bool
+    {
+        return (bool) $this->activo;
     }
 }

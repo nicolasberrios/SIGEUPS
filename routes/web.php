@@ -2,17 +2,16 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\FotografiaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UpsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-
     return redirect()->route('dashboard');
-
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
@@ -20,10 +19,8 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get(
-        '/dashboard',
-        [DashboardController::class, 'index']
-    )->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -31,15 +28,25 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource(
-        'ups',
-        UpsController::class
-    );
+    Route::resource('ups', UpsController::class)
+        ->except(['destroy']);
 
-    Route::get(
-        '/ups/busqueda',
-        [UpsController::class, 'search']
-    )->name('ups.search');
+    Route::delete('/ups/{up}', [UpsController::class, 'destroy'])
+        ->middleware('admin')
+        ->name('ups.destroy');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Fotografías
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('/ups/{up}/fotografias', [FotografiaController::class, 'store'])
+        ->name('fotografias.store');
+
+    Route::delete('/fotografias/{fotografia}', [FotografiaController::class, 'destroy'])
+        ->middleware('admin')
+        ->name('fotografias.destroy');
 
     /*
     |--------------------------------------------------------------------------
@@ -47,15 +54,13 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource(
-        'eventos',
-        EventoController::class
-    )->only([
-        'index',
-        'create',
-        'store',
-        'show',
-    ]);
+    Route::resource('eventos', EventoController::class)
+        ->only([
+            'index',
+            'create',
+            'store',
+            'show',
+        ]);
 
     /*
     |--------------------------------------------------------------------------
@@ -63,20 +68,14 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get(
-        '/profile',
-        [ProfileController::class, 'edit']
-    )->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
 
-    Route::patch(
-        '/profile',
-        [ProfileController::class, 'update']
-    )->name('profile.update');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
-    Route::delete(
-        '/profile',
-        [ProfileController::class, 'destroy']
-    )->name('profile.destroy');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 
 });
 

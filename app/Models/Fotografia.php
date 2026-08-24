@@ -10,23 +10,23 @@ class Fotografia extends Model
     protected $table = 'fotografias';
 
     protected $fillable = [
+        'ups_id',
         'evento_id',
         'usuario_id',
         'ruta',
         'descripcion',
     ];
 
-    /**
-     * Evento al que pertenece la fotografía.
-     */
+    public function ups(): BelongsTo
+    {
+        return $this->belongsTo(Ups::class, 'ups_id');
+    }
+
     public function evento(): BelongsTo
     {
         return $this->belongsTo(Evento::class);
     }
 
-    /**
-     * Usuario que subió la fotografía.
-     */
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(User::class);

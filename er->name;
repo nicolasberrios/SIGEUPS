@@ -1,0 +1,19 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#8621
+    [34mid[39m: [35m1[39m,
+    [34mrole_id[39m: [35m1[39m,
+    [34mname[39m: [32m"[39m[32mAdministrador[39m[32m"[39m,
+    [34memail[39m: [32m"[39m[32madmin@sigeups.cl[39m[32m"[39m,
+    [34memail_verified_at[39m: [36mnull[39m,
+    #[33mpassword[39m: [32m"[39m\$[32m2y[39m\$[32m12[39m\$[32m7jnlq.9ptkM7Kd/K4iiucOHgUNHmZ7gEzK1R7p7Nqilvp3s7nZEa2[39m[32m"[39m,
+    [34mactivo[39m: [35m1[39m,
+    #[33mremember_token[39m: [36mnull[39m,
+    [34mcreated_at[39m: [32m"[39m[32m2026-08-15 17:45:12[39m[32m"[39m,
+    [34mupdated_at[39m: [32m"[39m[32m2026-08-15 17:45:12[39m[32m"[39m,
+    [34mrole[39m: [34;4mApp\Models\Role[39;24m {#8190
+      [34mid[39m: [35m1[39m,
+      [34mnombre[39m: [32m"[39m[32mAdministrador[39m[32m"[39m,
+      [34mdescripcion[39m: [32m"[39m[32mAcceso total al sistema[39m[32m"[39m,
+      [34mcreated_at[39m: [32m"[39m[32m2026-08-15 17:45:11[39m[32m"[39m,
+      [34mupdated_at[39m: [32m"[39m[32m2026-08-15 17:45:11[39m[32m"[39m,
+    },
+  }
