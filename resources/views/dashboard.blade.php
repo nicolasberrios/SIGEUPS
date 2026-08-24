@@ -188,7 +188,7 @@
 
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                         <a
                             href="{{ route('ups.index') }}"
@@ -206,19 +206,25 @@
 
                         </a>
 
-                        <button
-                            class="btn-secondary opacity-50 cursor-not-allowed">
+                        <a
+                            href="{{ route('eventos.create') }}"
+                            class="btn-secondary text-center">
 
-                            Registrar Evento
+                            Registrar evento
 
-                        </button>
+                        </a>
 
-                        <button
-                            class="btn-secondary opacity-50 cursor-not-allowed">
+                        @if(auth()->user()->isAdmin())
 
-                            Reportes
+                            <a
+                                href="{{ route('usuarios.index') }}"
+                                class="btn-secondary text-center">
 
-                        </button>
+                                Usuarios
+
+                            </a>
+
+                        @endif
 
                     </div>
 

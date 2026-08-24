@@ -48,6 +48,20 @@
 
                     </a>
 
+                    @if(auth()->user()->isAdmin())
+
+                        <a
+                            href="{{ route('usuarios.index') }}"
+                            class="{{ request()->routeIs('usuarios.*')
+                                ? 'text-red-600 font-semibold'
+                                : 'text-gray-700 hover:text-red-600' }}">
+
+                            Usuarios
+
+                        </a>
+
+                    @endif
+
                 </div>
 
             </div>
@@ -66,7 +80,7 @@
 
                     <div class="text-xs text-gray-500">
 
-                        {{ Auth::user()->role->nombre }}
+                        {{ Auth::user()->role->nombre ?? 'Sin rol' }}
 
                     </div>
 

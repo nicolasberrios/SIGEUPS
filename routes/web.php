@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\EventoController;
@@ -13,6 +14,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'active'])->group(function () {
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -78,6 +81,23 @@ Route::middleware(['auth', 'active'])->group(function () {
             'store',
             'show',
         ]);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Administración de usuarios
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware('admin')->group(function () {
+
+
+    Route::resource('usuarios', UsuarioController::class)
+                ->except(['show', 'destroy']);
+
+    Route::patch('/usuarios/{usuario}/toggle-activo', [UsuarioController::class, 'toggleActivo'])
+                ->name('usuarios.toggle-activo');
+
+        });
 
     /*
     |--------------------------------------------------------------------------
