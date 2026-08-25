@@ -232,7 +232,7 @@
 
             </div>
 
-            {{-- ================= PRIORIDAD ================= --}}
+            {{-- ================= EQUIPOS QUE REQUIEREN ATENCIÓN ================= --}}
 
             <div class="panel mt-6">
 
@@ -242,13 +242,115 @@
 
                 </div>
 
-                <p class="text-gray-400">
+                <p class="text-sm text-gray-500 mb-5">
 
-                    En este panel aparecerán automáticamente las UPS que lleven demasiado tiempo en laboratorio,
-                    equipos pendientes de devolución, intervenciones críticas y cualquier situación que requiera
-                    atención inmediata del supervisor.
+                    UPS que llevan más de 3 meses en laboratorio, en préstamo o listas para devolución.
 
                 </p>
+
+                @if($equiposAtencion->isEmpty())
+
+                    <p class="text-gray-400">
+
+                        No existen UPS que superen los 3 meses en los estados definidos.
+
+                    </p>
+
+                @else
+
+                    <div class="overflow-x-auto">
+
+                        <table class="table-sigeups min-w-full">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>UPS</th>
+
+                                    <th>Estado actual</th>
+
+                                    <th>Propietario</th>
+
+                                    <th>Ubicación</th>
+
+                                    <th>Días en estado</th>
+
+                                    <th></th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach($equiposAtencion as $up)
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+
+                                                {{ $up->numero_identificador }}
+
+                                            </strong>
+
+                                            <div class="text-xs text-gray-500">
+
+                                                {{ $up->modelo->marca->nombre }} {{ $up->modelo->nombre }}
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $up->estadoActual->nombre }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $up->propietario->nombre }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $up->ubicacionActual->nombre }}
+
+                                        </td>
+
+                                        <td>
+
+                                            {{ $up->dias_en_estado }} días
+
+                                        </td>
+
+                                        <td class="text-right">
+
+                                            <a
+                                                href="{{ route('ups.show', $up) }}"
+                                                class="btn-secondary">
+
+                                                Ver ficha
+
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                @endif
 
             </div>
 

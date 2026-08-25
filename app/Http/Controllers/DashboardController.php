@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Estado;
 use App\Models\Evento;
 use App\Models\Ups;
 use Illuminate\View\View;
@@ -13,38 +12,82 @@ class DashboardController extends Controller
     {
         $totalUps = Ups::count();
 
-        $disponibles = Ups::whereHas('estadoActual', function ($q) {
-            $q->where('nombre', 'Disponible');
+        $disponibles = Ups::whereHas('estadoActual', function ($query) {
+            $query->where('nombre', 'Disponible');
         })->count();
 
-        $prestamo = Ups::whereHas('estadoActual', function ($q) {
-            $q->where('nombre', 'En préstamo');
+        $laboratorio = Ups::whereHas('estadoActual', function ($query) {
+            $query->where('nombre', 'En laboratorio');
         })->count();
 
-        $laboratorio = Ups::whereHas('estadoActual', function ($q) {
-            $q->where('nombre', 'En laboratorio');
+        $prestamo = Ups::whereHas('estadoActual', function ($query) {
+            $query->where('nombre', 'En préstamo');
         })->count();
 
-        $devolucion = Ups::whereHas('estadoActual', function ($q) {
-            $q->where('nombre', 'Lista para devolución');
+        $devolucion = Ups::whereHas('estadoActual', function ($query) {
+            $query->where('nombre', 'Lista para devolución');
         })->count();
 
         $actividadReciente = Evento::with([
             'ups',
             'tipoEvento',
-            'usuario'
+            'usuario',
         ])
-        ->latest('fecha_hora')
-        ->take(8)
-        ->get();
+            ->latest('fecha_hora')
+            ->take(8)
+            ->get();
 
-        return view('dashboard', compact(
-            'totalUps',
-            'disponibles',
-            'prestamo',
-            'laboratorio',
-            'devolucion',
-            'actividadReciente'
-        ));
+        $estadosAtencion = [
+            'En laboratorio',
+            'En préstamo',
+            'Lista para devolución',
+        ];
+
+        $equiposAtencion = Ups::with([
+            'modelo.marca',
+            'propietario',
+            'estadoActual',
+            'ubicacionActual',
+            'eventos' => function ($query) {
+                $query->latest('fecha_hora');
+            },
+        ])
+            ->whereHas('estadoActual', function ($query) use ($estadosAtencion) {
+                $query->whereIn('nombre', $estadosAtencion);
+            })
+            ->get()
+            ->map(function ($up) {
+
+                $ultimoEventoEstado = $up->eventos
+                    ->where('estado_resultante_id', $up->estado_actual_id)
+                    ->sortByDesc('fecha_hora')
+                    ->first();
+
+                $fechaReferencia = $ultimoEventoEstado
+                    ? $ultimoEventoEstado->fecha_hora
+                    : $up->updated_at;
+
+                $up->fecha_estado_actual = $fechaReferencia;
+
+                $up->dias_en_estado = now()->diffInDays($fechaReferencia);
+
+                return $up;
+
+            })
+            ->filter(function ($up) {
+                return $up->fecha_estado_actual <= now()->subMonths(3);
+            })
+            ->sortByDesc('dias_en_estado')
+            ->values();
+
+        return view('dashboard', [
+            'totalUps' => $totalUps,
+            'disponibles' => $disponibles,
+            'laboratorio' => $laboratorio,
+            'prestamo' => $prestamo,
+            'devolucion' => $devolucion,
+            'actividadReciente' => $actividadReciente,
+            'equiposAtencion' => $equiposAtencion,
+        ]);
     }
 }

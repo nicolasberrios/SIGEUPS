@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\FotografiaController;
+use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PropietarioController;
 use App\Http\Controllers\UpsController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,8 +17,6 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'active'])->group(function () {
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -90,12 +91,33 @@ Route::middleware(['auth', 'active'])->group(function () {
 
     Route::middleware('admin')->group(function () {
 
+        Route::resource('usuarios', UsuarioController::class)
+            ->except(['show', 'destroy']);
 
-    Route::resource('usuarios', UsuarioController::class)
-                ->except(['show', 'destroy']);
+        Route::patch('/usuarios/{usuario}/toggle-activo', [UsuarioController::class, 'toggleActivo'])
+            ->name('usuarios.toggle-activo');
 
-    Route::patch('/usuarios/{usuario}/toggle-activo', [UsuarioController::class, 'toggleActivo'])
-                ->name('usuarios.toggle-activo');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Catálogos
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware('admin')
+        ->prefix('catalogos')
+        ->name('catalogos.')
+        ->group(function () {
+
+            Route::resource('marcas', MarcaController::class)
+                ->except(['show']);
+
+            Route::resource('modelos', ModeloController::class)
+                ->except(['show']);
+
+            Route::resource('propietarios', PropietarioController::class)
+                ->except(['show']);
 
         });
 

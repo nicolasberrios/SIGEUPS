@@ -60,6 +60,16 @@
 
                         </a>
 
+                        <a
+                            href="{{ route('catalogos.marcas.index') }}"
+                            class="{{ request()->routeIs('catalogos.*')
+                                ? 'text-red-600 font-semibold'
+                                : 'text-gray-700 hover:text-red-600' }}">
+
+                            Catálogos
+
+                        </a>
+
                     @endif
 
                 </div>
